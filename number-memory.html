@@ -116,9 +116,23 @@
         }
     </style>
     <!-- 先加载外部CSS -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="number-memory.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./number-memory.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    
+    <!-- 页面内容可见性修复 -->
+    <script>
+        // 确保页面内容始终可见
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = "1";
+            document.body.style.transform = "none";
+            setTimeout(function() {
+                if (getComputedStyle(document.body).opacity !== "1") {
+                    document.body.setAttribute('style', 'opacity: 1 !important; transform: none !important');
+                }
+            }, 500);
+        });
+    </script>
 </head>
 <body>
     <div id="debug-panel" class="debug-info" style="display:none;" onclick="this.style.display='none';">调试模式</div>
@@ -263,6 +277,41 @@
     <div id="debug-info" style="display: none;"></div>
 
     <!-- 先加载主JS文件 -->
-    <script src="number-memory.js"></script>
+    <script src="./number-memory.js"></script>
+    
+    <!-- 错误处理和修复脚本 -->
+    <script>
+        // 全局错误处理
+        window.addEventListener('error', function(e) {
+            console.error('页面错误:', e.message);
+            // 尝试恢复基本功能
+            document.body.style.opacity = "1";
+            document.body.style.transform = "none";
+            
+            // 确保第一个屏幕可见
+            const startScreen = document.getElementById('start-screen');
+            if (startScreen) {
+                startScreen.style.display = 'block';
+            }
+            
+            // 确保按钮可点击
+            const startBtn = document.getElementById('start-btn');
+            if (startBtn) {
+                startBtn.addEventListener('click', function() {
+                    alert('游戏启动中，请等待...');
+                    location.reload();
+                });
+            }
+        });
+        
+        // 确保页面显示，5秒后检查
+        setTimeout(function() {
+            const startScreen = document.getElementById('start-screen');
+            if (startScreen && getComputedStyle(startScreen).display === 'none' && !document.querySelector('.game-screen.active')) {
+                startScreen.style.display = 'block';
+                console.log('强制显示开始屏幕');
+            }
+        }, 5000);
+    </script>
 </body>
 </html> 

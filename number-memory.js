@@ -9,6 +9,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('数字记忆测试页面加载完成');
     
+    // 确保页面内容可见（不依赖loaded类）
+    document.body.style.opacity = "1";
+    document.body.style.transform = "translateY(0)";
+    
     // 添加页面加载动画
     setTimeout(() => {
         document.body.classList.add('loaded');
@@ -22,6 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!styleSheetsLoaded) {
         console.warn('警告: 外部样式表可能未加载');
+        // 如果样式表未加载，添加内联样式保证基本功能
+        const emergencyStyles = document.createElement('style');
+        emergencyStyles.textContent = `
+            body { opacity: 1 !important; transform: none !important; }
+            .game-screen.active { display: block !important; }
+            .btn { display: inline-block; padding: 10px; background: #2962ff; color: white; }
+        `;
+        document.head.appendChild(emergencyStyles);
     }
     
     // 显示调试面板
@@ -327,6 +339,23 @@ document.addEventListener('DOMContentLoaded', function() {
     let toastTimeout = null;
     
     function showToast(message) {
+        console.log('显示提示:', message); // 输出到控制台作为备份
+        
+        // 检查toast元素是否存在
+        if (!toast || !toastMessage) {
+            console.warn('Toast元素不存在，创建一个临时的');
+            // 如果toast元素不存在，创建一个临时的
+            const tempToast = document.createElement('div');
+            tempToast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:white;padding:10px 20px;border-radius:4px;z-index:1000;';
+            tempToast.textContent = message;
+            document.body.appendChild(tempToast);
+            
+            setTimeout(() => {
+                tempToast.remove();
+            }, 3000);
+            return;
+        }
+        
         if (toastTimeout) {
             clearTimeout(toastTimeout);
         }
@@ -335,10 +364,18 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.classList.remove('hidden');
         toast.classList.add('visible');
         
+        // 确保toast可见，即使CSS没有加载
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        
         toastTimeout = setTimeout(() => {
             toast.classList.remove('visible');
+            toast.style.opacity = '0';
+            
             setTimeout(() => {
                 toast.classList.add('hidden');
+                toast.style.display = 'none';
             }, 300);
         }, 3000);
     }

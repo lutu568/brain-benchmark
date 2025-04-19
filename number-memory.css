@@ -1,5 +1,12 @@
 /* 数字记忆测试样式 - 简化版 */
 
+/* 确保页面立即显示的修复 */
+html, body {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+
 /* 基础布局 */
 body {
     font-family: Arial, sans-serif;
