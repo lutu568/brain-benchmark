@@ -3,9 +3,33 @@
  * 玩家需要在短时间内记住并重复显示的数字
  */
 
-// 数字记忆测试 - 简化版
+// 数字记忆测试 - 修复版
+
+// 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('数字记忆测试加载完成');
+    console.log('数字记忆测试页面加载完成');
+    
+    // 添加页面加载动画
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 300);
+    
+    // 检查样式表是否加载
+    const styleSheets = Array.from(document.styleSheets);
+    const styleSheetsLoaded = styleSheets.some(sheet => 
+        sheet.href && (sheet.href.includes('styles.css') || sheet.href.includes('number-memory.css'))
+    );
+    
+    if (!styleSheetsLoaded) {
+        console.warn('警告: 外部样式表可能未加载');
+    }
+    
+    // 显示调试面板
+    const debugPanel = document.getElementById('debug-panel');
+    if (debugPanel) {
+        debugPanel.style.display = 'block';
+        debugPanel.textContent = '调试模式 - 页面已加载';
+    }
     
     // 游戏状态
     const gameState = {
@@ -16,76 +40,114 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // 获取DOM元素
-    const startScreen = document.getElementById('start-screen');
-    const numberDisplayScreen = document.getElementById('number-display-screen');
-    const numberInputScreen = document.getElementById('number-input-screen');
-    const resultScreen = document.getElementById('result-screen');
-    const gameOverScreen = document.getElementById('game-over-screen');
+    const elements = {};
     
-    const startBtn = document.getElementById('start-btn');
-    const submitBtn = document.getElementById('submit-btn');
-    const continueBtn = document.getElementById('continue-btn');
-    const restartBtn = document.getElementById('restart-btn');
+    try {
+        // 游戏屏幕
+        elements.startScreen = document.getElementById('start-screen');
+        elements.numberScreen = document.getElementById('number-display-screen');
+        elements.inputScreen = document.getElementById('number-input-screen');
+        elements.resultScreen = document.getElementById('result-screen');
+        elements.gameOverScreen = document.getElementById('game-over-screen');
+        
+        // 按钮
+        elements.startBtn = document.getElementById('start-btn');
+        elements.submitBtn = document.getElementById('submit-btn');
+        elements.continueBtn = document.getElementById('continue-btn');
+        elements.restartBtn = document.getElementById('restart-btn');
+        elements.shareBtn = document.getElementById('share-btn');
+        
+        // 其他元素
+        elements.levelDisplay = document.getElementById('current-level');
+        elements.numberDisplay = document.getElementById('number-to-remember');
+        elements.numberInput = document.getElementById('number-input');
+        elements.correctAnswer = document.getElementById('correct-number');
+        elements.finalLevel = document.getElementById('final-level');
+        elements.finalDigits = document.getElementById('final-digits');
+        elements.percentile = document.getElementById('percentile');
+        
+        // 消息容器
+        elements.successMessage = document.getElementById('success-message');
+        elements.failureMessage = document.getElementById('failure-message');
+        
+        // 调试信息
+        updateDebug('所有DOM元素已找到');
+    } catch (error) {
+        console.error('DOM元素查找错误:', error);
+        updateDebug('错误: DOM元素查找失败 - ' + error.message);
+        return; // 停止执行
+    }
     
-    const currentLevelDisplay = document.getElementById('current-level');
-    const numberToRememberDisplay = document.getElementById('number-to-remember');
-    const numberInput = document.getElementById('number-input');
-    const correctNumberDisplay = document.getElementById('correct-number');
-    const finalLevelDisplay = document.getElementById('final-level');
-    const finalDigitsDisplay = document.getElementById('final-digits');
-    const percentileDisplay = document.getElementById('percentile');
+    // 检查关键元素是否存在
+    const requiredElements = [
+        'startScreen', 'numberScreen', 'inputScreen', 'resultScreen', 
+        'startBtn', 'submitBtn', 'continueBtn', 
+        'numberDisplay', 'numberInput'
+    ];
     
-    // 调试信息 - 检查元素是否找到
-    const elementsToCheck = {
-        'start-screen': startScreen,
-        'number-display-screen': numberDisplayScreen,
-        'number-input-screen': numberInputScreen,
-        'result-screen': resultScreen,
-        'game-over-screen': gameOverScreen,
-        'start-btn': startBtn,
-        'submit-btn': submitBtn,
-        'continue-btn': continueBtn,
-        'restart-btn': restartBtn,
-        'current-level': currentLevelDisplay,
-        'number-to-remember': numberToRememberDisplay,
-        'number-input': numberInput,
-        'correct-number': correctNumberDisplay,
-        'final-level': finalLevelDisplay
-    };
-    
-    // 检查所有元素是否存在
-    let allElementsFound = true;
-    for (const [id, element] of Object.entries(elementsToCheck)) {
-        if (!element) {
-            console.error(`找不到元素: #${id}`);
-            allElementsFound = false;
+    let missingElements = [];
+    for (const key of requiredElements) {
+        if (!elements[key]) {
+            missingElements.push(key);
         }
     }
     
-    if (!allElementsFound) {
-        console.error('部分DOM元素未找到，游戏可能无法正常运行');
-        alert('页面加载错误，请刷新页面重试');
-        return;
+    if (missingElements.length > 0) {
+        const errorMsg = '缺少关键元素: ' + missingElements.join(', ');
+        console.error(errorMsg);
+        updateDebug('错误: ' + errorMsg);
+        alert('页面加载错误，缺少必要元素');
+        return; // 停止执行
     }
     
-    console.log('所有必要元素已找到');
-    
     // 添加事件监听器
-    startBtn.addEventListener('click', startGame);
-    submitBtn.addEventListener('click', checkAnswer);
-    continueBtn.addEventListener('click', nextLevel);
-    restartBtn.addEventListener('click', restartGame);
+    elements.startBtn.addEventListener('click', startGame);
+    elements.submitBtn.addEventListener('click', checkAnswer);
+    elements.continueBtn.addEventListener('click', nextLevel);
+    elements.restartBtn.addEventListener('click', restartGame);
+    elements.shareBtn.addEventListener('click', shareResult);
     
     // 键盘事件 - 回车键提交
-    numberInput.addEventListener('keyup', function(event) {
+    elements.numberInput.addEventListener('keyup', function(event) {
         if (event.key === 'Enter') {
             checkAnswer();
         }
     });
     
-    // 显示初始屏幕
-    showScreen(startScreen);
+    // 设置初始屏幕
+    showScreen(elements.startScreen);
     updateLevelDisplay();
+    updateDebug('初始化完成，等待开始游戏');
+    
+    // 开始游戏
+    function startGame() {
+        updateDebug('游戏开始');
+        gameState.level = 1;
+        updateLevelDisplay();
+        showToast('开始挑战！');
+        showNextNumber();
+    }
+    
+    // 显示下一个数字
+    function showNextNumber() {
+        // 生成新数字 (数字长度 = 当前级别 + 2)
+        const numberLength = gameState.level + 2;
+        gameState.numberToRemember = generateNumber(numberLength);
+        
+        // 显示数字
+        elements.numberDisplay.textContent = gameState.numberToRemember;
+        showScreen(elements.numberScreen);
+        
+        updateDebug('显示数字: ' + gameState.numberToRemember);
+        
+        // 重置计时器
+        resetTimer();
+        
+        // 设置计时器
+        gameState.timerTimeout = setTimeout(function() {
+            showInputScreen();
+        }, gameState.timerDuration);
+    }
     
     // 生成随机数字
     function generateNumber(length) {
@@ -101,61 +163,41 @@ document.addEventListener('DOMContentLoaded', function() {
         return number;
     }
     
-    // 开始游戏
-    function startGame() {
-        console.log('游戏开始');
-        gameState.level = 1;
-        updateLevelDisplay();
-        showNextNumber();
-    }
-    
-    // 显示下一个数字
-    function showNextNumber() {
-        // 生成新数字 (数字长度 = 当前级别 + 2)
-        const numberLength = gameState.level + 2;
-        gameState.numberToRemember = generateNumber(numberLength);
-        
-        // 显示数字
-        numberToRememberDisplay.textContent = gameState.numberToRemember;
-        showScreen(numberDisplayScreen);
-        
-        // 重置计时器
-        resetTimer();
-        
-        // 设置计时器
-        gameState.timerTimeout = setTimeout(function() {
-            showInputScreen();
-        }, gameState.timerDuration);
-    }
-    
     // 显示输入屏幕
     function showInputScreen() {
         clearTimeout(gameState.timerTimeout);
-        showScreen(numberInputScreen);
-        numberInput.value = '';
-        numberInput.focus();
+        showScreen(elements.inputScreen);
+        elements.numberInput.value = '';
+        elements.numberInput.focus();
+        updateDebug('显示输入屏幕');
     }
     
     // 检查答案
     function checkAnswer() {
-        const userAnswer = numberInput.value.trim();
+        const userAnswer = elements.numberInput.value.trim();
         
         if (!userAnswer) {
-            alert('请输入数字');
+            showToast('请输入数字');
             return;
         }
+        
+        updateDebug('检查答案: 用户输入=' + userAnswer + ', 正确答案=' + gameState.numberToRemember);
         
         const isCorrect = (userAnswer === gameState.numberToRemember);
         
         if (isCorrect) {
             // 答案正确
-            document.getElementById('success-message').classList.add('active');
-            document.getElementById('failure-message').classList.remove('active');
+            elements.successMessage.classList.add('active');
+            elements.failureMessage.classList.remove('active');
+            updateDebug('答案正确');
+            showToast('回答正确！');
         } else {
             // 答案错误
-            document.getElementById('success-message').classList.remove('active');
-            document.getElementById('failure-message').classList.add('active');
-            correctNumberDisplay.textContent = gameState.numberToRemember;
+            elements.successMessage.classList.remove('active');
+            elements.failureMessage.classList.add('active');
+            elements.correctAnswer.textContent = gameState.numberToRemember;
+            updateDebug('答案错误');
+            showToast('回答错误！');
             
             // 2秒后显示游戏结束
             setTimeout(function() {
@@ -163,56 +205,76 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 2000);
         }
         
-        showScreen(resultScreen);
+        showScreen(elements.resultScreen);
     }
     
     // 下一级别
     function nextLevel() {
         gameState.level++;
         updateLevelDisplay();
+        updateDebug('进入下一级: ' + gameState.level);
         showNextNumber();
     }
     
     // 游戏结束
     function showGameOver() {
-        showScreen(gameOverScreen);
+        showScreen(elements.gameOverScreen);
         
-        finalLevelDisplay.textContent = gameState.level;
+        elements.finalLevel.textContent = gameState.level;
         
-        const digitsCount = gameState.level + 2;
-        if (finalDigitsDisplay) {
-            finalDigitsDisplay.textContent = digitsCount;
+        // 计算最终记住的位数
+        const digitsCount = gameState.level + 2 - 1; // 最后一关答错了，所以减1
+        if (elements.finalDigits) {
+            elements.finalDigits.textContent = digitsCount;
         }
         
         // 计算百分位
         const userPercentile = calculatePercentile(gameState.level);
-        if (percentileDisplay) {
-            percentileDisplay.textContent = userPercentile + '%';
+        if (elements.percentile) {
+            elements.percentile.textContent = userPercentile + '%';
         }
+        
+        updateDebug('游戏结束: 级别=' + gameState.level + ', 百分位=' + userPercentile);
+        showToast('测试结束！你的最终成绩: ' + digitsCount + ' 位数字');
     }
     
     // 重新开始游戏
     function restartGame() {
         gameState.level = 1;
         updateLevelDisplay();
+        updateDebug('重新开始游戏');
+        showToast('重新开始挑战！');
         showNextNumber();
     }
     
     // 更新级别显示
     function updateLevelDisplay() {
-        currentLevelDisplay.textContent = gameState.level;
+        elements.levelDisplay.textContent = gameState.level;
     }
     
     // 显示指定屏幕
     function showScreen(screenToShow) {
         // 隐藏所有屏幕
-        const allScreens = document.querySelectorAll('.game-screen');
+        const allScreens = [
+            elements.startScreen,
+            elements.numberScreen,
+            elements.inputScreen,
+            elements.resultScreen,
+            elements.gameOverScreen
+        ];
+        
+        // 确保屏幕元素存在再操作
         allScreens.forEach(function(screen) {
-            screen.classList.remove('active');
+            if (screen) {
+                screen.classList.remove('active');
+            }
         });
         
         // 显示所选屏幕
-        screenToShow.classList.add('active');
+        if (screenToShow) {
+            screenToShow.classList.add('active');
+            updateDebug('显示屏幕: ' + screenToShow.id);
+        }
     }
     
     // 重置计时器
@@ -220,18 +282,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const timerBar = document.getElementById('timer-bar');
         const timerProgress = document.getElementById('timer-progress');
         
+        if (!timerBar) {
+            console.error('找不到计时器元素');
+            return;
+        }
+        
+        // 移除旧的进度条
         if (timerProgress) {
             timerProgress.remove();
         }
         
-        if (timerBar) {
+        // 添加新的进度条并强制重绘
+        setTimeout(() => {
             const newProgress = document.createElement('div');
             newProgress.id = 'timer-progress';
             timerBar.appendChild(newProgress);
             
             // 强制重绘触发CSS动画
             void timerBar.offsetWidth;
-        }
+        }, 10);
     }
     
     // 计算百分位
@@ -242,5 +311,59 @@ document.addEventListener('DOMContentLoaded', function() {
         if (level <= 10) return 80 + (level - 8) * 5;
         if (level <= 15) return 90 + (level - 10) * 2;
         return 99;
+    }
+    
+    // 更新调试信息
+    function updateDebug(message) {
+        console.log('调试:', message);
+        if (debugPanel) {
+            debugPanel.textContent = message;
+        }
+    }
+    
+    // Toast 通知功能
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    let toastTimeout = null;
+    
+    function showToast(message) {
+        if (toastTimeout) {
+            clearTimeout(toastTimeout);
+        }
+        
+        toastMessage.textContent = message;
+        toast.classList.remove('hidden');
+        toast.classList.add('visible');
+        
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('visible');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 300);
+        }, 3000);
+    }
+    
+    // 显示欢迎消息
+    showToast('欢迎参加数字记忆测试！');
+    
+    // 添加分享结果功能
+    function shareResult() {
+        // 获取最终结果
+        const level = elements.finalLevel.textContent;
+        const digits = elements.finalDigits.textContent;
+        const percentile = elements.percentile.textContent;
+        
+        // 创建分享文本
+        const shareText = `我在BrainBenchmark数字记忆测试中记住了${digits}位数字，超过了${percentile}的用户！来挑战我吧！`;
+        
+        // 复制到剪贴板
+        navigator.clipboard.writeText(shareText)
+            .then(() => {
+                showToast('结果已复制到剪贴板！');
+            })
+            .catch(err => {
+                console.error('无法复制结果: ', err);
+                showToast('复制失败，请手动分享。');
+            });
     }
 }); 
