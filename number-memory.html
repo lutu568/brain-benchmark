@@ -8,6 +8,24 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="number-memory.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        /* 确保基本样式能正常工作 */
+        .game-screen {
+            display: none;
+        }
+        .game-screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .result-message {
+            display: none;
+        }
+        .result-message.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -144,6 +162,10 @@
         <span id="toast-message"></span>
     </div>
 
+    <!-- 调试信息 -->
+    <div id="debug-info" style="display: none;"></div>
+
+    <!-- 先加载主JS文件 -->
     <script src="number-memory.js"></script>
 </body>
 </html> 
