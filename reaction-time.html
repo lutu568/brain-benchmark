@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="测试你的反应时间，了解你的反应速度与其他人相比如何">
+    <title>反应时间测试 | BrainBenchmark</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="reaction-time.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html" class="logo-link">BrainBenchmark</a></h1>
+            <p class="tagline">测试并提升你的认知能力</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="test-info">
+            <h2>反应时间测试</h2>
+            <div class="test-description">
+                <p>当屏幕从<span class="highlight-red">红色</span>变为<span class="highlight-green">绿色</span>时，请尽快点击屏幕。系统将测量你的反应时间（毫秒）。</p>
+                <p>尝试5次后，系统将显示你的平均反应时间，并与其他用户进行比较。</p>
+            </div>
+            
+            <div class="test-stats">
+                <div class="stat-item">
+                    <span class="stat-value">250 ms</span>
+                    <span class="stat-label">平均反应时间</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">190 ms</span>
+                    <span class="stat-label">前10%的成绩</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">160 ms</span>
+                    <span class="stat-label">最快记录</span>
+                </div>
+            </div>
+            
+            <div class="test-tips">
+                <h3>提升技巧</h3>
+                <ul>
+                    <li>保持专注，避免分心</li>
+                    <li>避免盯着屏幕太久导致视觉疲劳</li>
+                    <li>尝试放松肌肉，避免过度紧张</li>
+                </ul>
+            </div>
+            
+            <a href="index.html" class="btn back-btn">返回首页</a>
+        </section>
+
+        <section class="test-area">
+            <div id="reaction-box" class="waiting" tabindex="0" role="button" aria-label="反应测试区域">
+                <div id="reaction-content">等待中...</div>
+                <div class="instruction">点击此区域开始测试</div>
+            </div>
+            
+            <div class="results-area">
+                <div id="current-result">
+                    <span>当前结果: </span>
+                    <span id="current-time">-</span>
+                </div>
+                
+                <div class="attempt-container">
+                    <h3>尝试记录</h3>
+                    <div class="attempt-list">
+                        <div class="attempt-item">尝试 1: <span id="attempt-1">-</span></div>
+                        <div class="attempt-item">尝试 2: <span id="attempt-2">-</span></div>
+                        <div class="attempt-item">尝试 3: <span id="attempt-3">-</span></div>
+                        <div class="attempt-item">尝试 4: <span id="attempt-4">-</span></div>
+                        <div class="attempt-item">尝试 5: <span id="attempt-5">-</span></div>
+                    </div>
+                </div>
+                
+                <div class="final-results">
+                    <div class="avg-result">
+                        <div>平均反应时间: <span id="avg-time">-</span></div>
+                    </div>
+                    
+                    <div class="percentile">
+                        <div>超过了 <span id="percentile">-</span> 的用户</div>
+                    </div>
+                    
+                    <div class="rating-container">
+                        <div class="rating-label">评价:</div>
+                        <div id="rating-text">完成测试后显示</div>
+                    </div>
+                </div>
+                
+                <button id="restart-btn" class="btn hidden">重新开始测试</button>
+                
+                <div class="share-results hidden" id="share-section">
+                    <h3>分享你的结果</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn" id="copy-result">复制结果</button>
+                        <button class="share-btn" id="download-certificate">下载证书</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 BrainBenchmark - 脑力基准测试平台</p>
+            <nav class="footer-nav">
+                <a href="#" class="footer-link">关于我们</a>
+                <a href="#" class="footer-link">联系方式</a>
+                <a href="#" class="footer-link">隐私政策</a>
+            </nav>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast hidden">
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="reaction-time.js"></script>
+</body>
+</html> 

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BrainBenchmark脑力基准测试平台 - 测试并提升你的认知能力，包括反应时间、记忆力和注意力等">
+    <meta name="keywords" content="脑力测试,认知能力,反应时间,记忆力,注意力,智力测试">
+    <meta name="author" content="BrainBenchmark团队">
+    <title>脑力基准测试 | BrainBenchmark</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- 预加载反应时间测试页面相关资源 -->
+    <link rel="preload" href="reaction-time.css" as="style">
+    <link rel="preload" href="reaction-time.js" as="script">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html" class="logo-link">BrainBenchmark</a></h1>
+            <p class="tagline">测试并提升你的认知能力</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>欢迎来到脑力基准测试平台</h2>
+            <p>这个平台提供各种认知能力测试，让你了解自己在不同领域的表现，并与他人进行比较。每项测试都会测量不同的认知能力，包括反应时间、记忆力、注意力等。</p>
+            <p>选择下方的测试开始挑战自己吧！</p>
+        </section>
+
+        <section class="tests-grid">
+            <article class="test-card active">
+                <h3>反应时间测试</h3>
+                <p>测试你对视觉刺激的反应速度。平均反应时间约为250毫秒。</p>
+                <a href="reaction-time.html" class="btn" aria-label="开始反应时间测试">开始测试</a>
+            </article>
+            <article class="test-card coming-soon">
+                <h3>数字记忆</h3>
+                <p>测试你记忆数字序列的能力。大多数人能记住5-8个数字。</p>
+                <span class="btn disabled" aria-label="数字记忆测试即将推出" aria-disabled="true">即将推出</span>
+            </article>
+            <article class="test-card coming-soon">
+                <h3>序列记忆</h3>
+                <p>测试你记忆和重复序列的能力。考验你的工作记忆和空间感知能力。</p>
+                <span class="btn disabled" aria-label="序列记忆测试即将推出" aria-disabled="true">即将推出</span>
+            </article>
+            <article class="test-card coming-soon">
+                <h3>语言记忆</h3>
+                <p>测试你的词汇记忆能力。挑战你识别已见过和新单词的能力。</p>
+                <span class="btn disabled" aria-label="语言记忆测试即将推出" aria-disabled="true">即将推出</span>
+            </article>
+        </section>
+
+        <section class="info-section">
+            <h2>为什么进行认知测试？</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>了解自己的能力</h3>
+                    <p>通过科学的测试了解自己在不同认知领域的优势和可提升空间。</p>
+                </div>
+                <div class="info-item">
+                    <h3>跟踪进步</h3>
+                    <p>定期测试可以跟踪你的认知能力变化，帮助你评估训练效果。</p>
+                </div>
+                <div class="info-item">
+                    <h3>趣味挑战</h3>
+                    <p>这些测试不仅有科学依据，还是有趣的挑战，可以与朋友比拼。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 BrainBenchmark - 脑力基准测试平台</p>
+            <nav class="footer-nav">
+                <a href="#" class="footer-link">关于我们</a>
+                <a href="#" class="footer-link">联系方式</a>
+                <a href="#" class="footer-link">隐私政策</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        // 添加页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html> 
