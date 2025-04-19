@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="测试你记忆数字序列的能力，了解你的短期记忆与他人相比如何">
+    <title>数字记忆测试 | BrainBenchmark</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="number-memory.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html" class="logo-link">BrainBenchmark</a></h1>
+            <p class="tagline">测试并提升你的认知能力</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="test-info">
+            <h2>数字记忆测试</h2>
+            <div class="test-description">
+                <p>测试你的短期记忆能力。系统会显示一个数字序列，你需要记住并正确输入它。</p>
+                <p>每答对一题，数字长度会增加一位。答错则游戏结束，显示你的最终成绩。</p>
+            </div>
+            
+            <div class="test-stats">
+                <div class="stat-item">
+                    <span class="stat-value">7位</span>
+                    <span class="stat-label">平均水平</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">10位</span>
+                    <span class="stat-label">前10%的成绩</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">14位</span>
+                    <span class="stat-label">前1%的成绩</span>
+                </div>
+            </div>
+            
+            <div class="test-tips">
+                <h3>提升技巧</h3>
+                <ul>
+                    <li>尝试将数字分组记忆，例如将"1234567"分为"123-45-67"</li>
+                    <li>创建数字与熟悉事物的联系，如生日、重要日期等</li>
+                    <li>专注并避免分心，找一个安静的环境</li>
+                </ul>
+            </div>
+            
+            <a href="index.html" class="btn back-btn">返回首页</a>
+        </section>
+
+        <section class="test-area">
+            <div id="game-container">
+                <div id="level-display" class="game-info">
+                    <span>当前级别</span>
+                    <span id="current-level">1</span>
+                </div>
+                
+                <div id="game-screens">
+                    <!-- 开始屏幕 -->
+                    <div id="start-screen" class="game-screen active">
+                        <h3>数字记忆测试</h3>
+                        <p>准备好挑战你的记忆能力了吗？</p>
+                        <button id="start-btn" class="btn">开始测试</button>
+                    </div>
+                    
+                    <!-- 显示数字屏幕 -->
+                    <div id="number-display-screen" class="game-screen">
+                        <div class="number-container">
+                            <span id="number-to-remember">5</span>
+                        </div>
+                        <div id="timer-bar">
+                            <div id="timer-progress"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 输入数字屏幕 -->
+                    <div id="number-input-screen" class="game-screen">
+                        <h3>请输入你记住的数字</h3>
+                        <div class="input-container">
+                            <input type="text" id="number-input" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                            <button id="submit-btn" class="btn">提交</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 结果屏幕 -->
+                    <div id="result-screen" class="game-screen">
+                        <div id="success-message" class="result-message">
+                            <h3>正确!</h3>
+                            <p>进入下一级</p>
+                        </div>
+                        <div id="failure-message" class="result-message">
+                            <h3>很遗憾!</h3>
+                            <p>正确答案: <span id="correct-number"></span></p>
+                        </div>
+                        <button id="continue-btn" class="btn">继续</button>
+                    </div>
+                    
+                    <!-- 游戏结束屏幕 -->
+                    <div id="game-over-screen" class="game-screen">
+                        <h3>测试结束</h3>
+                        <div class="final-result">
+                            <p>你的最高级别: <span id="final-level" class="highlight"></span></p>
+                            <p>你能记住 <span id="final-digits" class="highlight"></span> 位数字</p>
+                            <div class="percentile-result">
+                                <p>超过了 <span id="percentile" class="highlight"></span> 的用户</p>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="restart-btn" class="btn">重新开始</button>
+                            <button id="share-btn" class="btn secondary">分享结果</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-area">
+                <div class="history-container">
+                    <h3>测试历史</h3>
+                    <div id="history-list" class="history-list">
+                        <!-- 历史记录将被JS动态添加 -->
+                        <div class="history-item empty">暂无历史记录</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 BrainBenchmark - 脑力基准测试平台</p>
+            <nav class="footer-nav">
+                <a href="#" class="footer-link">关于我们</a>
+                <a href="#" class="footer-link">联系方式</a>
+                <a href="#" class="footer-link">隐私政策</a>
+            </nav>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast hidden">
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="number-memory.js"></script>
+</body>
+</html> 
