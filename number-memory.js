@@ -18,16 +18,16 @@ const gameState = {
 // DOM 元素
 const elements = {
     startScreen: document.getElementById('start-screen'),
-    numberScreen: document.getElementById('number-screen'),
-    inputScreen: document.getElementById('input-screen'),
+    numberScreen: document.getElementById('number-display-screen'),
+    inputScreen: document.getElementById('number-input-screen'),
     resultScreen: document.getElementById('result-screen'),
     gameOverScreen: document.getElementById('game-over-screen'),
     
-    startBtn: document.getElementById('start-game'),
-    submitBtn: document.getElementById('submit-answer'),
-    nextLevelBtn: document.getElementById('next-level'),
-    restartBtn: document.getElementById('restart-game'),
-    backHomeBtn: document.getElementById('back-home'),
+    startBtn: document.getElementById('start-btn'),
+    submitBtn: document.getElementById('submit-btn'),
+    nextLevelBtn: document.getElementById('continue-btn'),
+    restartBtn: document.getElementById('restart-btn'),
+    backHomeBtn: document.getElementById('share-btn'),
     
     levelDisplay: document.getElementById('current-level'),
     numberToRemember: document.getElementById('number-to-remember'),
@@ -41,6 +41,7 @@ const elements = {
     percentileResult: document.getElementById('percentile-result'),
     
     toast: document.getElementById('toast'),
+    toastMessage: document.getElementById('toast-message'),
     historyList: document.getElementById('history-list')
 };
 
@@ -79,7 +80,7 @@ function addEventListeners() {
     // 重新开始按钮
     elements.restartBtn.addEventListener('click', restartGame);
     
-    // 返回主页按钮
+    // 分享按钮作为返回主页按钮
     elements.backHomeBtn.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
@@ -378,17 +379,28 @@ function calculatePercentile(level) {
     }
     
     // 更新百分位显示
-    elements.percentileResult.textContent = 
-        `您的表现超过了${userPercentile}%的人群`;
+    if (elements.percentileResult) {
+        document.querySelector('.percentile-result p').innerHTML = 
+            `超过了 <span class="highlight">${userPercentile}%</span> 的用户`;
+    }
 }
 
 // 显示Toast消息
 function showToast(message) {
-    elements.toast.textContent = message;
-    elements.toast.classList.add('visible');
-    
-    // 3秒后隐藏
-    setTimeout(() => {
-        elements.toast.classList.remove('visible');
-    }, 3000);
+    if (elements.toast) {
+        if (elements.toastMessage) {
+            elements.toastMessage.textContent = message;
+        } else {
+            elements.toast.textContent = message;
+        }
+        
+        elements.toast.classList.remove('hidden');
+        elements.toast.classList.add('visible');
+        
+        // 3秒后隐藏
+        setTimeout(() => {
+            elements.toast.classList.remove('visible');
+            elements.toast.classList.add('hidden');
+        }, 3000);
+    }
 } 
