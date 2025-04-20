@@ -1,6 +1,6 @@
-// 反应时间测试的逻辑代码
+// Reaction Time Test Logic Code
 
-// 获取DOM元素
+// Get DOM elements
 const reactionBox = document.getElementById('reaction-box');
 const reactionContent = document.getElementById('reaction-content');
 const instruction = document.querySelector('.instruction');
@@ -22,7 +22,7 @@ const downloadCertBtn = document.getElementById('download-certificate');
 const toast = document.getElementById('toast');
 const toastMessage = document.getElementById('toast-message');
 
-// 测试状态变量
+// Test state variables
 let state = 'initial'; // 'initial', 'waiting', 'ready', 'testing', 'finished', 'completed'
 let startTime, endTime;
 let currentAttempt = 0;
@@ -30,38 +30,38 @@ let attemptResults = [];
 let waitTimeout = null;
 let toastTimeout = null;
 
-// 参考数据 - 反应时间百分位 (ms)
+// Reference data - Reaction time percentiles (ms)
 const percentileData = {
-    1: 400,  // 1% 的人比这更慢
+    1: 400,  // 1% of people are slower than this
     5: 350,
     10: 330,
     20: 310,
     30: 290,
     40: 275,
-    50: 265,  // 中位数
+    50: 265,  // Median
     60: 255,
     70: 240,
     80: 225,
     90: 210,
     95: 195,
-    99: 170   // 只有1%的人比这更快
+    99: 170   // Only 1% of people are faster than this
 };
 
-// 评价系统
+// Rating system
 const ratingSystem = {
-    0: { text: "反应迟钝", class: "rating-poor" },
-    20: { text: "较慢", class: "rating-below-average" },
-    40: { text: "一般", class: "rating-average" },
-    60: { text: "较快", class: "rating-good" },
-    80: { text: "非常快", class: "rating-excellent" },
-    95: { text: "超级快！", class: "rating-exceptional" }
+    0: { text: "Slow", class: "rating-poor" },
+    20: { text: "Below Average", class: "rating-below-average" },
+    40: { text: "Average", class: "rating-average" },
+    60: { text: "Good", class: "rating-good" },
+    80: { text: "Excellent", class: "rating-excellent" },
+    95: { text: "Exceptional!", class: "rating-exceptional" }
 };
 
-// 初始化测试
+// Initialize test
 function initTest() {
     resetTest();
     
-    // 添加事件监听器
+    // Add event listeners
     reactionBox.addEventListener('click', handleClick);
     reactionBox.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -77,35 +77,35 @@ function initTest() {
     copyResultBtn.addEventListener('click', copyResults);
     downloadCertBtn.addEventListener('click', downloadCertificate);
     
-    // 初始化页面状态
+    // Initialize page state
     reactionBox.classList.add('waiting');
-    reactionContent.textContent = '点击开始';
-    instruction.textContent = '点击此区域开始测试';
+    reactionContent.textContent = 'Click to Start';
+    instruction.textContent = 'Click this area to start the test';
     state = 'initial';
     
-    // 添加页面加载动画
+    // Add page loading animation
     setTimeout(() => {
         document.body.classList.add('loaded');
     }, 300);
 }
 
-// 重置测试
+// Reset test
 function resetTest() {
-    // 清除所有定时器
+    // Clear all timers
     if (waitTimeout) {
         clearTimeout(waitTimeout);
         waitTimeout = null;
     }
     
-    // 重置状态
+    // Reset state
     reactionBox.className = 'waiting';
     currentAttempt = 0;
     attemptResults = [];
     state = 'initial';
     
-    // 重置显示
-    reactionContent.textContent = '点击开始';
-    instruction.textContent = '点击此区域开始测试';
+    // Reset display
+    reactionContent.textContent = 'Click to Start';
+    instruction.textContent = 'Click this area to start the test';
     currentTimeDisplay.textContent = '-';
     
     for (let i = 0; i < attemptDisplays.length; i++) {
@@ -115,82 +115,82 @@ function resetTest() {
     
     avgTimeDisplay.textContent = '-';
     percentileDisplay.textContent = '-';
-    ratingText.textContent = '完成测试后显示';
+    ratingText.textContent = 'Displayed after test completion';
     ratingText.className = '';
     
-    // 隐藏按钮和分享区域
+    // Hide buttons and share area
     restartBtn.classList.add('hidden');
     shareSection.classList.add('hidden');
 }
 
-// 处理点击事件
+// Handle click event
 function handleClick() {
     switch (state) {
         case 'initial':
-            // 开始测试
+            // Start test
             startTest();
             break;
         
         case 'waiting':
-            // 如果在等待期间点击，显示过早点击警告
+            // If clicked during waiting period, show early click warning
             showEarlyClick();
             break;
         
         case 'ready':
-            // 记录反应时间
+            // Record reaction time
             endTime = performance.now();
             const reactionTime = Math.round(endTime - startTime);
             recordResult(reactionTime);
             break;
         
         case 'finished':
-            // 继续下一次测试
+            // Continue to next test
             continueTest();
             break;
             
         case 'completed':
-            // 重置状态，重新开始
+            // Reset state, start again
             resetTest();
             startTest();
             break;
     }
 }
 
-// 开始测试
+// Start test
 function startTest() {
     state = 'waiting';
     reactionBox.classList.remove('waiting');
     reactionBox.classList.add('ready');
-    reactionContent.textContent = '等待绿色...';
-    instruction.textContent = '当屏幕变绿时，请立即点击';
+    reactionContent.textContent = 'Wait for green...';
+    instruction.textContent = 'Click as soon as the screen turns green';
     
-    // 随机2-5秒后变为绿色
+    // Change to green after random 2-5 seconds
     const randomDelay = Math.floor(Math.random() * 3000) + 2000;
     waitTimeout = setTimeout(() => {
         if (state === 'waiting') {
             state = 'ready';
             reactionBox.classList.remove('ready');
             reactionBox.classList.add('go');
-            reactionContent.textContent = '点击!';
-            instruction.textContent = '现在!';
-            startTime = performance.now(); // 使用performance.now()获得更精确的时间
+            reactionContent.textContent = 'Click!';
+            instruction.textContent = 'Now!';
+            startTime = performance.now(); // Use performance.now() for more accurate time
         }
     }, randomDelay);
 }
 
-// 显示过早点击警告
+// Show early click warning
 function showEarlyClick() {
     clearTimeout(waitTimeout);
     state = 'waiting';
     reactionBox.classList.remove('ready');
     reactionBox.classList.add('early');
-    reactionContent.textContent = '太早了!';
-    instruction.textContent = '请等待绿色出现再点击';
+    reactionContent.textContent = 'Too Early!';
+    instruction.textContent = 'Wait for green to appear before clicking';
     
-    // 显示提示消息
-    showToast('点击太早了，请等待屏幕变绿再点击');
+    // Show notification message
+    showToast('Clicked too early! Wait for the screen to turn green before clicking');
     
-    // 1.5秒后重新开始
+    // Restart after 1.5 seconds
     setTimeout(() => {
         if (state === 'waiting') {
             startTest();
@@ -198,94 +198,94 @@ function showEarlyClick() {
     }, 1500);
 }
 
-// 记录结果
+// Record result
 function recordResult(reactionTime) {
     state = 'finished';
     reactionBox.classList.remove('go');
     reactionBox.classList.add('clicked');
     
-    // 显示当前结果
+    // Display current result
     currentTimeDisplay.textContent = `${reactionTime} ms`;
     reactionContent.textContent = `${reactionTime} ms`;
     
-    // 防止不合理的值（如果过快可能是作弊）
+    // Prevent unreasonable values (if too fast might be cheating)
     if (reactionTime < 100) {
-        showToast('反应时间过快，可能不准确。请认真测试。');
+        showToast('Reaction time too fast, may not be accurate. Please test honestly.');
         reactionTime = 100;
     }
     
-    // 记录这次尝试的结果
+    // Record this attempt's result
     attemptResults.push(reactionTime);
     attemptDisplays[currentAttempt].textContent = `${reactionTime} ms`;
     
-    // 高亮当前尝试
+    // Highlight current attempt
     const attemptItem = attemptDisplays[currentAttempt].parentElement;
     attemptItem.classList.add('active');
     
-    // 更新尝试计数
+    // Update attempt count
     currentAttempt++;
     
-    // 如果完成了所有尝试
+    // If all attempts are completed
     if (currentAttempt >= 5) {
         finishTest();
     } else {
-        // 1.5秒后准备下一次尝试
+        // Prepare for next attempt after 1.5 seconds
         setTimeout(() => {
             if (state === 'finished') {
-                instruction.textContent = '点击继续下一次测试';
-                reactionContent.textContent = '点击继续';
+                instruction.textContent = 'Click to continue to next attempt';
+                reactionContent.textContent = 'Click to continue';
             }
         }, 1500);
     }
 }
 
-// 继续测试
+// Continue test
 function continueTest() {
     reactionBox.classList.remove('clicked');
     reactionBox.classList.add('waiting');
     startTest();
 }
 
-// 完成测试
+// Complete test
 function finishTest() {
     state = 'completed';
     
-    // 分析结果
+    // Analyze results
     const results = analyzeResults(attemptResults);
     
-    // 更新尝试记录的样式（标记最好和最差的尝试）
+    // Update attempt record styles (mark best and worst attempts)
     updateAttemptStyles(results.bestIndex, results.worstIndex);
     
-    // 显示平均结果
+    // Display average result
     avgTimeDisplay.textContent = `${results.avg} ms`;
     
-    // 计算并显示百分位
+    // Calculate and display percentile
     const percentile = calculatePercentile(results.avg);
     percentileDisplay.textContent = `${percentile}%`;
     
-    // 显示评价
+    // Display rating
     const rating = getRating(percentile);
     ratingText.textContent = rating.text;
     ratingText.className = rating.class;
     
-    // 更新显示
-    reactionContent.textContent = `平均: ${results.avg} ms`;
-    instruction.textContent = `超过了 ${percentile}% 的用户`;
+    // Update display
+    reactionContent.textContent = `Average: ${results.avg} ms`;
+    instruction.textContent = `Better than ${percentile}% of users`;
     
-    // 显示重新开始按钮和分享区域
+    // Show restart button and share area
     restartBtn.classList.remove('hidden');
     shareSection.classList.remove('hidden');
     
-    // 显示祝贺消息
-    showToast('测试完成！你的平均反应时间为 ' + results.avg + ' ms');
+    // Show congratulation message
+    showToast('Test complete! Your average reaction time is ' + results.avg + ' ms');
 }
 
-// 分析结果
+// Analyze results
 function analyzeResults(results) {
     const sum = results.reduce((a, b) => a + b, 0);
     const avg = Math.round(sum / results.length);
     
-    // 找出最好和最差的尝试
+    // Find best and worst attempts
     let bestTime = Infinity;
     let worstTime = -Infinity;
     let bestIndex = 0;
@@ -311,44 +311,44 @@ function analyzeResults(results) {
     };
 }
 
-// 更新尝试记录的样式
+// Update attempt record styles
 function updateAttemptStyles(bestIndex, worstIndex) {
-    // 移除之前的所有样式
+    // Remove all previous styles
     for (let i = 0; i < attemptDisplays.length; i++) {
         const attemptItem = attemptDisplays[i].parentElement;
         attemptItem.classList.remove('active');
     }
     
-    // 添加最好和最差的样式
+    // Add best and worst styles
     attemptDisplays[bestIndex].parentElement.classList.add('best');
     attemptDisplays[worstIndex].parentElement.classList.add('worst');
 }
 
-// 计算百分位
+// Calculate percentile
 function calculatePercentile(time) {
-    // 找到第一个大于等于用户时间的百分位
+    // Find the first percentile greater than or equal to user's time
     const keys = Object.keys(percentileData).map(Number).sort((a, b) => a - b);
     
     for (let i = 0; i < keys.length; i++) {
         if (time >= percentileData[keys[i]]) {
             if (i === 0) return 0;
             
-            // 线性插值计算更精确的百分位
+            // Linear interpolation for more accurate percentile
             const lowerPercentile = keys[i-1];
             const upperPercentile = keys[i];
             const lowerTime = percentileData[lowerPercentile];
             const upperTime = percentileData[upperPercentile];
             
-            // 反向映射（时间越短越好）
+            // Reverse mapping (shorter time is better)
             const ratio = (lowerTime - time) / (lowerTime - upperTime);
             return Math.round(lowerPercentile + ratio * (upperPercentile - lowerPercentile));
         }
     }
     
-    return 99; // 如果比所有参考值都好
+    return 99; // If better than all reference values
 }
 
-// 获取评价
+// Get rating
 function getRating(percentile) {
     const ratingKeys = Object.keys(ratingSystem).map(Number).sort((a, b) => a - b);
     
@@ -358,35 +358,35 @@ function getRating(percentile) {
         }
     }
     
-    return ratingSystem[0]; // 默认最低评价
+    return ratingSystem[0]; // Default lowest rating
 }
 
-// 复制结果功能
+// Copy results function
 function copyResults() {
     const avg = avgTimeDisplay.textContent;
     const percentile = percentileDisplay.textContent;
     const rating = ratingText.textContent;
     
-    const resultText = `我在BrainBenchmark脑力基准测试中的反应时间为${avg}，超过了${percentile}的用户！评价：${rating}`;
+    const resultText = `My reaction time in the BrainBenchmark cognitive test is ${avg}, better than ${percentile} of users! Rating: ${rating}`;
     
-    // 使用剪贴板API复制
+    // Use clipboard API to copy
     navigator.clipboard.writeText(resultText)
         .then(() => {
-            showToast('结果已复制到剪贴板！');
+            showToast('Results copied to clipboard!');
         })
         .catch(err => {
-            console.error('无法复制结果: ', err);
-            showToast('复制失败，请手动复制。');
+            console.error('Unable to copy results: ', err);
+            showToast('Copy failed, please copy manually.');
         });
 }
 
-// 下载证书功能（简单实现）
+// Download certificate function (simple implementation)
 function downloadCertificate() {
-    // 在实际应用中，这里可以生成一个实际的证书
-    showToast('证书功能即将推出！');
+    // In a real application, this would generate an actual certificate
+    showToast('Certificate feature coming soon!');
 }
 
-// 显示Toast消息
+// Show Toast message
 function showToast(message) {
     if (toastTimeout) {
         clearTimeout(toastTimeout);
@@ -404,28 +404,28 @@ function showToast(message) {
     }, 3000);
 }
 
-// 添加键盘支持
+// Add keyboard support
 document.addEventListener('keydown', function(e) {
     if (state === 'ready' && (e.key === ' ' || e.key === 'Enter')) {
         handleClick();
     }
 });
 
-// 确保应用全局错误处理
+// Ensure application global error handling
 window.addEventListener('error', function(e) {
-    console.error('应用错误：', e.message);
-    showToast('出现错误，请刷新页面重试。');
+    console.error('Application error:', e.message);
+    showToast('An error occurred, please refresh the page and try again.');
 });
 
-// 添加页面可见性变化处理
+// Add page visibility change handling
 document.addEventListener('visibilitychange', function() {
     if (document.hidden && state === 'waiting') {
-        // 如果页面不可见且处于等待状态，重置测试
+        // If page is not visible and in waiting state, reset test
         clearTimeout(waitTimeout);
         resetTest();
-        showToast('测试已重置，请重新开始。');
+        showToast('Test has been reset, please start again.');
     }
 });
 
-// 初始化测试
+// Initialize test
 document.addEventListener('DOMContentLoaded', initTest); 

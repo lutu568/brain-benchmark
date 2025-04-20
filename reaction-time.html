@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="测试你的反应时间，了解你的反应速度与其他人相比如何">
-    <title>反应时间测试 | BrainBenchmark</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Test your reaction time and see how quickly you can respond to visual stimuli">
+    <meta name="theme-color" content="#2962ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="canonical" href="https://brainbenchmark.com/reaction-time.html">
+    <title>Reaction Time Test | BrainBenchmark</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="reaction-time.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -13,90 +17,90 @@
     <header>
         <div class="container">
             <h1><a href="index.html" class="logo-link">BrainBenchmark</a></h1>
-            <p class="tagline">测试并提升你的认知能力</p>
+            <p class="tagline">Test and Enhance Your Cognitive Abilities</p>
         </div>
     </header>
 
     <main class="container">
         <section class="test-info">
-            <h2>反应时间测试</h2>
+            <h2>Reaction Time Test</h2>
             <div class="test-description">
-                <p>当屏幕从<span class="highlight-red">红色</span>变为<span class="highlight-green">绿色</span>时，请尽快点击屏幕。系统将测量你的反应时间（毫秒）。</p>
-                <p>尝试5次后，系统将显示你的平均反应时间，并与其他用户进行比较。</p>
+                <p>When the screen changes from <span class="highlight-red">red</span> to <span class="highlight-green">green</span>, click as quickly as possible. The system will measure your reaction time in milliseconds.</p>
+                <p>After 5 attempts, the system will display your average reaction time and compare it with other users.</p>
             </div>
             
             <div class="test-stats">
                 <div class="stat-item">
                     <span class="stat-value">250 ms</span>
-                    <span class="stat-label">平均反应时间</span>
+                    <span class="stat-label">Average Reaction Time</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-value">190 ms</span>
-                    <span class="stat-label">前10%的成绩</span>
+                    <span class="stat-label">Top 10% Score</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-value">160 ms</span>
-                    <span class="stat-label">最快记录</span>
+                    <span class="stat-label">Fastest Record</span>
                 </div>
             </div>
             
             <div class="test-tips">
-                <h3>提升技巧</h3>
+                <h3>Tips to Improve</h3>
                 <ul>
-                    <li>保持专注，避免分心</li>
-                    <li>避免盯着屏幕太久导致视觉疲劳</li>
-                    <li>尝试放松肌肉，避免过度紧张</li>
+                    <li>Stay focused and avoid distractions</li>
+                    <li>Avoid staring at the screen too long to prevent visual fatigue</li>
+                    <li>Try to relax your muscles and avoid excessive tension</li>
                 </ul>
             </div>
             
-            <a href="index.html" class="btn back-btn">返回首页</a>
+            <a href="index.html" class="btn back-btn">Back to Home</a>
         </section>
 
         <section class="test-area">
-            <div id="reaction-box" class="waiting" tabindex="0" role="button" aria-label="反应测试区域">
-                <div id="reaction-content">等待中...</div>
-                <div class="instruction">点击此区域开始测试</div>
+            <div id="reaction-box" class="waiting" tabindex="0" role="button" aria-label="Reaction test area">
+                <div id="reaction-content">Waiting...</div>
+                <div class="instruction">Click this area to start the test</div>
             </div>
             
             <div class="results-area">
                 <div id="current-result">
-                    <span>当前结果: </span>
+                    <span>Current Result: </span>
                     <span id="current-time">-</span>
                 </div>
                 
                 <div class="attempt-container">
-                    <h3>尝试记录</h3>
+                    <h3>Attempt Records</h3>
                     <div class="attempt-list">
-                        <div class="attempt-item">尝试 1: <span id="attempt-1">-</span></div>
-                        <div class="attempt-item">尝试 2: <span id="attempt-2">-</span></div>
-                        <div class="attempt-item">尝试 3: <span id="attempt-3">-</span></div>
-                        <div class="attempt-item">尝试 4: <span id="attempt-4">-</span></div>
-                        <div class="attempt-item">尝试 5: <span id="attempt-5">-</span></div>
+                        <div class="attempt-item">Attempt 1: <span id="attempt-1">-</span></div>
+                        <div class="attempt-item">Attempt 2: <span id="attempt-2">-</span></div>
+                        <div class="attempt-item">Attempt 3: <span id="attempt-3">-</span></div>
+                        <div class="attempt-item">Attempt 4: <span id="attempt-4">-</span></div>
+                        <div class="attempt-item">Attempt 5: <span id="attempt-5">-</span></div>
                     </div>
                 </div>
                 
                 <div class="final-results">
                     <div class="avg-result">
-                        <div>平均反应时间: <span id="avg-time">-</span></div>
+                        <div>Average Reaction Time: <span id="avg-time">-</span></div>
                     </div>
                     
                     <div class="percentile">
-                        <div>超过了 <span id="percentile">-</span> 的用户</div>
+                        <div>Better than <span id="percentile">-</span> of users</div>
                     </div>
                     
                     <div class="rating-container">
-                        <div class="rating-label">评价:</div>
-                        <div id="rating-text">完成测试后显示</div>
+                        <div class="rating-label">Rating:</div>
+                        <div id="rating-text">Displayed after test completion</div>
                     </div>
                 </div>
                 
-                <button id="restart-btn" class="btn hidden">重新开始测试</button>
+                <button id="restart-btn" class="btn hidden">Restart Test</button>
                 
                 <div class="share-results hidden" id="share-section">
-                    <h3>分享你的结果</h3>
+                    <h3>Share Your Results</h3>
                     <div class="share-buttons">
-                        <button class="share-btn" id="copy-result">复制结果</button>
-                        <button class="share-btn" id="download-certificate">下载证书</button>
+                        <button class="share-btn" id="copy-result">Copy Results</button>
+                        <button class="share-btn" id="download-certificate">Download Certificate</button>
                     </div>
                 </div>
             </div>
@@ -105,11 +109,11 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 BrainBenchmark - 脑力基准测试平台</p>
+            <p>&copy; 2024 BrainBenchmark - Cognitive Benchmark Platform</p>
             <nav class="footer-nav">
-                <a href="#" class="footer-link">关于我们</a>
-                <a href="#" class="footer-link">联系方式</a>
-                <a href="#" class="footer-link">隐私政策</a>
+                <a href="#" class="footer-link">About Us</a>
+                <a href="#" class="footer-link">Contact</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
             </nav>
         </div>
     </footer>

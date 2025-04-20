@@ -1,21 +1,21 @@
 /* 全局样式 */
 :root {
-    --primary-color: #2962ff;
-    --primary-light: #768fff;
-    --primary-dark: #0039cb;
-    --secondary-color: #4caf50;
-    --secondary-light: #80e27e;
-    --secondary-dark: #087f23;
-    --accent-color: #ff4081;
-    --light-color: #f5f5f5;
-    --dark-color: #333;
-    --text-color: #333;
-    --text-light: #757575;
-    --card-bg: #fff;
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --card-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+    --primary-color: #007aff; /* 苹果蓝色 */
+    --primary-light: #5ac8fa; /* 苹果浅蓝色 */
+    --primary-dark: #0062cc; /* 深蓝色 */
+    --secondary-color: #34c759; /* 苹果绿色 */
+    --secondary-light: #68d982; /* 浅绿色 */
+    --secondary-dark: #248a3d; /* 深绿色 */
+    --accent-color: #ff3b30; /* 苹果红色 */
+    --light-color: #f5f5f7; /* 苹果灰白色背景 */
+    --dark-color: #1d1d1f; /* 苹果深灰色 */
+    --text-color: #1d1d1f; /* 主文本颜色 */
+    --text-light: #86868b; /* 次要文本颜色 */
+    --card-bg: #ffffff; /* 卡片背景 */
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* 更精致的阴影 */
+    --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12); /* 悬停阴影 */
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    --border-radius: 8px;
+    --border-radius: 10px; /* 更圆润的边角 */
 }
 
 * {
@@ -52,34 +52,35 @@ body.loaded {
 
 /* 标题样式 */
 header {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
+    background: var(--card-bg);
+    color: var(--text-color);
     padding: 2rem 0;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--card-shadow);
     position: relative;
     z-index: 10;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
-    font-size: 2.8rem;
+    font-size: 2.5rem;
     margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
 }
 
 .logo-link {
-    color: white;
+    color: var(--primary-color);
     text-decoration: none;
     transition: var(--transition);
 }
 
 .logo-link:hover {
-    color: var(--primary-light);
+    color: var(--primary-dark);
 }
 
 .tagline {
-    font-size: 1.3rem;
-    opacity: 0.95;
+    font-size: 1.2rem;
+    color: var(--text-light);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -99,15 +100,17 @@ main {
 }
 
 .intro h2 {
-    font-size: 2.2rem;
+    font-size: 2rem;
     margin-bottom: 1.2rem;
-    color: var(--primary-color);
+    color: var(--text-color);
+    font-weight: 600;
 }
 
 .intro p {
     font-size: 1.1rem;
     margin-bottom: 1.2rem;
-    color: var(--text-color);
+    color: var(--text-light);
+    line-height: 1.6;
 }
 
 /* 测试卡片网格 */
@@ -131,6 +134,7 @@ main {
     height: 100%;
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .test-card::before {
@@ -138,32 +142,32 @@ main {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s ease;
+    width: 5px;
+    height: 100%;
+    background: var(--primary-color);
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .test-card.active::before {
-    background: linear-gradient(90deg, var(--secondary-color), var(--secondary-light));
-    transform: scaleX(1);
+    background: var(--secondary-color);
+    opacity: 1;
 }
 
 .test-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-5px);
     box-shadow: var(--card-shadow-hover);
 }
 
 .test-card:hover::before {
-    transform: scaleX(1);
+    opacity: 1;
 }
 
 .test-card h3 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     margin-bottom: 1rem;
-    color: var(--primary-color);
+    color: var(--text-color);
+    font-weight: 600;
 }
 
 .test-card p {
@@ -171,6 +175,7 @@ main {
     font-size: 1rem;
     color: var(--text-light);
     flex-grow: 1;
+    line-height: 1.6;
 }
 
 .coming-soon {
@@ -188,8 +193,8 @@ main {
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     font-size: 0.8rem;
-    font-weight: bold;
-    transform: rotate(5deg);
+    font-weight: 500;
+    transform: rotate(0deg);
 }
 
 /* 按钮样式 */
@@ -197,8 +202,8 @@ main {
     display: inline-block;
     background-color: var(--primary-color);
     color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
+    padding: 0.8rem 1.8rem;
+    border-radius: 20px;
     text-decoration: none;
     font-weight: 500;
     transition: var(--transition);
@@ -209,6 +214,8 @@ main {
     position: relative;
     overflow: hidden;
     z-index: 1;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
 }
 
 .btn::after {
@@ -227,8 +234,8 @@ main {
 
 .btn:hover {
     background-color: var(--primary-dark);
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn:hover::after {
@@ -264,13 +271,15 @@ main {
     padding: 3rem 2rem;
     box-shadow: var(--card-shadow);
     margin-bottom: 3rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .info-section h2 {
     text-align: center;
-    color: var(--primary-color);
+    color: var(--text-color);
     margin-bottom: 2rem;
     font-size: 1.8rem;
+    font-weight: 600;
 }
 
 .info-grid {
@@ -284,6 +293,7 @@ main {
     border-radius: var(--border-radius);
     background-color: var(--light-color);
     transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .info-item:hover {
@@ -292,21 +302,24 @@ main {
 }
 
 .info-item h3 {
-    color: var(--primary-color);
+    color: var(--text-color);
     margin-bottom: 1rem;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .info-item p {
     color: var(--text-light);
+    line-height: 1.6;
 }
 
 /* 页脚样式 */
 footer {
-    background: linear-gradient(135deg, var(--dark-color), #222);
-    color: white;
+    background: var(--light-color);
+    color: var(--text-light);
     padding: 2rem 0;
     margin-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 footer .container {
@@ -322,15 +335,16 @@ footer .container {
 }
 
 .footer-link {
-    color: white;
+    color: var(--primary-color);
     text-decoration: none;
     opacity: 0.8;
     transition: var(--transition);
+    font-size: 0.9rem;
 }
 
 .footer-link:hover {
     opacity: 1;
-    color: var(--primary-light);
+    color: var(--primary-dark);
 }
 
 /* 动画 */
@@ -346,13 +360,32 @@ footer .container {
 }
 
 /* 响应式设计 */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
 @media (max-width: 992px) {
+    .container {
+        max-width: 720px;
+    }
+    
     .tests-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    header h1 {
+        font-size: 2.5rem;
     }
 }
 
 @media (max-width: 768px) {
+    .container {
+        max-width: 540px;
+    }
+    
     header h1 {
         font-size: 2.2rem;
     }
@@ -367,10 +400,12 @@ footer .container {
     
     .tests-grid {
         grid-template-columns: 1fr;
+        gap: 1.2rem;
     }
     
     .info-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     footer .container {
@@ -383,11 +418,38 @@ footer .container {
         margin-top: 1rem;
         justify-content: center;
     }
+    
+    .btn {
+        padding: 0.7rem 1.3rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        width: 95%;
+        padding: 0 15px;
+    }
+    
+    header {
+        padding: 1.5rem 0;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .tagline {
+        font-size: 1rem;
+    }
+    
+    .info-section {
+        padding: 2rem 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
     .container {
-        width: 95%;
+        width: 100%;
         padding: 0 10px;
     }
     
@@ -397,5 +459,50 @@ footer .container {
     
     .intro h2 {
         font-size: 1.6rem;
+    }
+    
+    .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* 确保在小型手机上的可用性 */
+@media (max-width: 360px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .test-card {
+        padding: 1.2rem;
+    }
+    
+    .test-card h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    header, footer, .btn {
+        display: none;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
+        background: #fff;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #000;
     }
 } 

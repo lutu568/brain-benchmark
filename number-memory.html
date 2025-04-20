@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="测试你记忆数字序列的能力，了解你的短期记忆与他人相比如何">
-    <title>数字记忆测试 | BrainBenchmark</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Test your ability to memorize number sequences and see how your short-term memory compares to others">
+    <meta name="theme-color" content="#2962ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="canonical" href="https://brainbenchmark.com/number-memory.html">
+    <title>Number Memory Test | BrainBenchmark</title>
     <!-- 基本样式内联，确保即使CSS未加载也能正常显示 -->
     <style>
         /* 基本内联样式 */
@@ -135,54 +139,54 @@
     </script>
 </head>
 <body>
-    <div id="debug-panel" class="debug-info" style="display:none;" onclick="this.style.display='none';">调试模式</div>
+    <div id="debug-panel" class="debug-info" style="display:none;" onclick="this.style.display='none';">Debug Mode</div>
 
     <header>
         <div class="container">
             <h1><a href="index.html" class="logo-link">BrainBenchmark</a></h1>
-            <p class="tagline">测试并提升你的认知能力</p>
+            <p class="tagline">Test and Enhance Your Cognitive Abilities</p>
         </div>
     </header>
 
     <main class="container">
         <section class="test-info">
-            <h2>数字记忆测试</h2>
+            <h2>Number Memory Test</h2>
             <div class="test-description">
-                <p>测试你的短期记忆能力。系统会显示一个数字序列，你需要记住并正确输入它。</p>
-                <p>每答对一题，数字长度会增加一位。答错则游戏结束，显示你的最终成绩。</p>
+                <p>Test your short-term memory capacity. The system will display a sequence of numbers that you need to remember and input correctly.</p>
+                <p>With each correct answer, the number length increases by one digit. If you answer incorrectly, the game ends and displays your final score.</p>
             </div>
             
             <div class="test-stats">
                 <div class="stat-item">
-                    <span class="stat-value">7位</span>
-                    <span class="stat-label">平均水平</span>
+                    <span class="stat-value">7 digits</span>
+                    <span class="stat-label">Average Level</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-value">10位</span>
-                    <span class="stat-label">前10%的成绩</span>
+                    <span class="stat-value">10 digits</span>
+                    <span class="stat-label">Top 10% Score</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-value">14位</span>
-                    <span class="stat-label">前1%的成绩</span>
+                    <span class="stat-value">14 digits</span>
+                    <span class="stat-label">Top 1% Score</span>
                 </div>
             </div>
             
             <div class="test-tips">
-                <h3>提升技巧</h3>
+                <h3>Tips to Improve</h3>
                 <ul>
-                    <li>尝试将数字分组记忆，例如将"1234567"分为"123-45-67"</li>
-                    <li>创建数字与熟悉事物的联系，如生日、重要日期等</li>
-                    <li>专注并避免分心，找一个安静的环境</li>
+                    <li>Try to group numbers when memorizing, e.g., divide "1234567" into "123-45-67"</li>
+                    <li>Create associations between numbers and familiar things, like birthdays or important dates</li>
+                    <li>Stay focused and avoid distractions, find a quiet environment</li>
                 </ul>
             </div>
             
-            <a href="index.html" class="btn back-btn">返回首页</a>
+            <a href="index.html" class="btn back-btn">Back to Home</a>
         </section>
 
         <section class="test-area">
             <div id="game-container">
                 <div class="game-info">
-                    <span>当前级别: </span>
+                    <span>Current Level: </span>
                     <span id="current-level">1</span>
                 </div>
                 
@@ -190,14 +194,14 @@
                 <div id="game-screens">
                     <!-- 开始屏幕 -->
                     <div id="start-screen" class="game-screen active">
-                        <h3>数字记忆测试</h3>
-                        <p>准备好挑战你的记忆能力了吗？</p>
-                        <button id="start-btn" class="btn">开始测试</button>
+                        <h3>Number Memory Test</h3>
+                        <p>Are you ready to challenge your memory?</p>
+                        <button id="start-btn" class="btn">Start Test</button>
                     </div>
                     
                     <!-- 显示数字屏幕 -->
                     <div id="number-display-screen" class="game-screen">
-                        <h3>记住这个数字</h3>
+                        <h3>Remember This Number</h3>
                         <div class="number-container">
                             <span id="number-to-remember">5</span>
                         </div>
@@ -208,39 +212,39 @@
                     
                     <!-- 输入数字屏幕 -->
                     <div id="number-input-screen" class="game-screen">
-                        <h3>请输入你记住的数字</h3>
+                        <h3>Enter the Number You Remembered</h3>
                         <div class="input-container">
                             <input type="text" id="number-input" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-                            <button id="submit-btn" class="btn">提交</button>
+                            <button id="submit-btn" class="btn">Submit</button>
                         </div>
                     </div>
                     
                     <!-- 结果屏幕 -->
                     <div id="result-screen" class="game-screen">
                         <div id="success-message" class="result-message">
-                            <h3>正确!</h3>
-                            <p>进入下一级</p>
+                            <h3>Correct!</h3>
+                            <p>Moving to next level</p>
                         </div>
                         <div id="failure-message" class="result-message">
-                            <h3>很遗憾!</h3>
-                            <p>正确答案: <span id="correct-number"></span></p>
+                            <h3>Sorry!</h3>
+                            <p>Correct answer: <span id="correct-number"></span></p>
                         </div>
-                        <button id="continue-btn" class="btn">继续</button>
+                        <button id="continue-btn" class="btn">Continue</button>
                     </div>
                     
                     <!-- 游戏结束屏幕 -->
                     <div id="game-over-screen" class="game-screen">
-                        <h3>测试结束</h3>
+                        <h3>Test Complete</h3>
                         <div class="final-result">
-                            <p>你的最高级别: <span id="final-level" class="highlight"></span></p>
-                            <p>你能记住 <span id="final-digits" class="highlight"></span> 位数字</p>
+                            <p>Your highest level: <span id="final-level" class="highlight"></span></p>
+                            <p>You memorized <span id="final-digits" class="highlight"></span> digits</p>
                             <div class="percentile-result">
-                                <p>超过了 <span id="percentile" class="highlight"></span> 的用户</p>
+                                <p>Better than <span id="percentile" class="highlight"></span> of users</p>
                             </div>
                         </div>
                         <div class="action-buttons">
-                            <button id="restart-btn" class="btn">重新开始</button>
-                            <button id="share-btn" class="btn secondary">分享结果</button>
+                            <button id="restart-btn" class="btn">Restart</button>
+                            <button id="share-btn" class="btn secondary">Share Results</button>
                         </div>
                     </div>
                 </div>
@@ -248,10 +252,10 @@
             
             <div class="results-area">
                 <div class="history-container">
-                    <h3>测试历史</h3>
+                    <h3>Test History</h3>
                     <div id="history-list" class="history-list">
                         <!-- 历史记录将被JS动态添加 -->
-                        <div class="history-item empty">暂无历史记录</div>
+                        <div class="history-item empty">No history yet</div>
                     </div>
                 </div>
             </div>
@@ -260,11 +264,11 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 BrainBenchmark - 脑力基准测试平台</p>
+            <p>&copy; 2024 BrainBenchmark - Cognitive Benchmark Platform</p>
             <nav class="footer-nav">
-                <a href="#" class="footer-link">关于我们</a>
-                <a href="#" class="footer-link">联系方式</a>
-                <a href="#" class="footer-link">隐私政策</a>
+                <a href="#" class="footer-link">About Us</a>
+                <a href="#" class="footer-link">Contact</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
             </nav>
         </div>
     </footer>
@@ -283,7 +287,7 @@
     <script>
         // 全局错误处理
         window.addEventListener('error', function(e) {
-            console.error('页面错误:', e.message);
+            console.error('Page error:', e.message);
             // 尝试恢复基本功能
             document.body.style.opacity = "1";
             document.body.style.transform = "none";
@@ -298,7 +302,7 @@
             const startBtn = document.getElementById('start-btn');
             if (startBtn) {
                 startBtn.addEventListener('click', function() {
-                    alert('游戏启动中，请等待...');
+                    alert('Game starting, please wait...');
                     location.reload();
                 });
             }
@@ -309,7 +313,7 @@
             const startScreen = document.getElementById('start-screen');
             if (startScreen && getComputedStyle(startScreen).display === 'none' && !document.querySelector('.game-screen.active')) {
                 startScreen.style.display = 'block';
-                console.log('强制显示开始屏幕');
+                console.log('Force display start screen');
             }
         }, 5000);
     </script>
