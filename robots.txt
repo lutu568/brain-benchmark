@@ -1,0 +1,6 @@
+# BrainBenchmark Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://braingame.cyou/sitemap.xml 
