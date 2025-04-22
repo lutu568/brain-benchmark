@@ -367,7 +367,7 @@ function copyResults() {
     const percentile = percentileDisplay.textContent;
     const rating = ratingText.textContent;
     
-    const resultText = `My reaction time in the BrainBenchmark cognitive test is ${avg}, better than ${percentile} of users! Rating: ${rating}`;
+    const resultText = `🧠 BrainBenchmark: My reaction time is ${avg} (${rating})\n💯 Better than ${percentile} of users\n🔗 Test your reaction time at https://braingame.cyou/reaction-time.html`;
     
     // Use clipboard API to copy
     navigator.clipboard.writeText(resultText)
@@ -428,4 +428,125 @@ document.addEventListener('visibilitychange', function() {
 });
 
 // Initialize test
-document.addEventListener('DOMContentLoaded', initTest); 
+document.addEventListener('DOMContentLoaded', initTest);
+
+function displayResults() {
+    const avgTime = calculateAverage(attempts.filter(time => time > 0));
+    document.getElementById('avg-time').textContent = avgTime.toFixed(1) + ' ms';
+
+    // 隐藏盒子和当前结果
+    document.getElementById('reaction-box').classList.add('hidden');
+    document.getElementById('current-result').classList.add('hidden');
+
+    // 显示最终结果
+    document.querySelector('.final-results').classList.remove('hidden');
+    document.getElementById('restart-btn').classList.remove('hidden');
+    document.getElementById('share-section').classList.remove('hidden');
+
+    // 计算百分位数和评级
+    let percentile = calculatePercentile(avgTime);
+    document.getElementById('percentile').textContent = percentile + '%';
+
+    // 增强版评级展示
+    let rating = 'Average', ratingClass = '', stars = '⭐⭐⭐', message = '';
+    
+    if (avgTime < 180) {
+        rating = 'Lightning Fast';
+        ratingClass = 'excellent';
+        stars = '⭐⭐⭐⭐⭐';
+        message = 'Incredible reflexes! You\'re among the elite performers.';
+    } else if (avgTime < 210) {
+        rating = 'Excellent';
+        ratingClass = 'great';
+        stars = '⭐⭐⭐⭐⭐';
+        message = 'Outstanding performance! Your reflexes are superior.';
+    } else if (avgTime < 240) {
+        rating = 'Very Good';
+        ratingClass = 'very-good';
+        stars = '⭐⭐⭐⭐';
+        message = 'Great job! Your reaction time is well above average.';
+    } else if (avgTime < 270) {
+        rating = 'Good';
+        ratingClass = 'good';
+        stars = '⭐⭐⭐⭐';
+        message = 'Nice work! Your reaction time is better than most people.';
+    } else if (avgTime < 300) {
+        rating = 'Above Average';
+        ratingClass = 'above-average';
+        stars = '⭐⭐⭐';
+        message = 'Good performance! You\'re above the average reaction time.';
+    } else if (avgTime < 330) {
+        rating = 'Average';
+        ratingClass = 'average';
+        stars = '⭐⭐⭐';
+        message = 'Your reaction time is within the average range.';
+    } else if (avgTime < 360) {
+        rating = 'Below Average';
+        ratingClass = 'below-average';
+        stars = '⭐⭐';
+        message = 'Keep practicing! You can improve your reaction time.';
+    } else {
+        rating = 'Needs Practice';
+        ratingClass = 'needs-practice';
+        stars = '⭐';
+        message = 'Everyone starts somewhere! Regular practice will help you improve.';
+    }
+
+    document.getElementById('rating-text').innerHTML = `<span class="rating ${ratingClass}">${rating}</span><br>${stars}<br><span class="rating-message">${message}</span>`;
+    
+    // 保存结果到本地存储
+    saveTestResult('reaction', avgTime);
+}
+
+// 新增函数：保存测试结果到本地存储
+function saveTestResult(testType, score) {
+    let history = JSON.parse(localStorage.getItem('brainBenchmark_history') || '{}');
+    if (!history[testType]) history[testType] = [];
+    
+    // 添加新成绩和日期
+    history[testType].unshift({
+        score: score,
+        date: new Date().toISOString()
+    });
+    
+    // 保留最近10条记录
+    if (history[testType].length > 10) history[testType] = history[testType].slice(0, 10);
+    
+    localStorage.setItem('brainBenchmark_history', JSON.stringify(history));
+    updateHistoryDisplay(testType, history[testType]);
+}
+
+// 新增函数：更新历史记录显示
+function updateHistoryDisplay(testType, records) {
+    const container = document.querySelector('.attempt-list');
+    if (!container) return;
+    
+    // 在尝试记录下添加历史最佳区域
+    let historySection = document.querySelector('.history-section');
+    if (!historySection) {
+        historySection = document.createElement('div');
+        historySection.className = 'history-section';
+        historySection.innerHTML = '<h4>Your Best Times</h4><div class="history-list"></div>';
+        container.parentNode.appendChild(historySection);
+    }
+    
+    const historyList = historySection.querySelector('.history-list');
+    historyList.innerHTML = '';
+    
+    if (records.length === 0) {
+        historyList.innerHTML = '<div class="history-empty">No previous records</div>';
+        return;
+    }
+    
+    // 只显示前3条最佳记录
+    const bestRecords = [...records].sort((a, b) => a.score - b.score).slice(0, 3);
+    
+    bestRecords.forEach((record, index) => {
+        const date = new Date(record.date);
+        const formattedDate = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        const el = document.createElement('div');
+        el.className = 'history-item';
+        el.innerHTML = `<span class="history-rank">#${index+1}</span> <span class="history-score">${record.score.toFixed(1)} ms</span> <span class="history-date">${formattedDate}</span>`;
+        historyList.appendChild(el);
+    });
+} 

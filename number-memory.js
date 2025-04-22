@@ -228,26 +228,152 @@ document.addEventListener('DOMContentLoaded', function() {
         showNextNumber();
     }
     
-    // Game over
+    // Show game over and final results
     function showGameOver() {
-        showScreen(elements.gameOverScreen);
-        
-        elements.finalLevel.textContent = gameState.level;
-        
-        // Calculate final remembered digits
-        const digitsCount = gameState.level + 2 - 1; // Last level was wrong, so subtract 1
-        if (elements.finalDigits) {
-            elements.finalDigits.textContent = digitsCount;
-        }
+        // Set final results
+        const level = gameState.level;
+        const digitsCount = gameState.level - 1;
+        elements.finalLevel.textContent = digitsCount;
+        elements.finalDigits.textContent = digitsCount;
         
         // Calculate percentile
-        const userPercentile = calculatePercentile(gameState.level);
-        if (elements.percentile) {
-            elements.percentile.textContent = userPercentile + '%';
+        const percentile = calculatePercentile(digitsCount);
+        elements.percentile.textContent = percentile + '%';
+        
+        // 增强版评级展示
+        let rating, ratingClass, stars, message;
+        
+        if (digitsCount >= 14) {
+            rating = 'Memory Master';
+            ratingClass = 'excellent';
+            stars = '⭐⭐⭐⭐⭐';
+            message = 'Exceptional memory capacity! You have a photographic memory.';
+        } else if (digitsCount >= 12) {
+            rating = 'Exceptional';
+            ratingClass = 'great';
+            stars = '⭐⭐⭐⭐⭐';
+            message = 'Remarkable memory! You\'re in the top 1% of users.';
+        } else if (digitsCount >= 10) {
+            rating = 'Very Good';
+            ratingClass = 'very-good';
+            stars = '⭐⭐⭐⭐';
+            message = 'Impressive! Your memory capacity is well above average.';
+        } else if (digitsCount >= 8) {
+            rating = 'Above Average';
+            ratingClass = 'good';
+            stars = '⭐⭐⭐⭐';
+            message = 'Great job! Your memory is better than most people.';
+        } else if (digitsCount >= 6) {
+            rating = 'Average';
+            ratingClass = 'average';
+            stars = '⭐⭐⭐';
+            message = 'Good work! You have a normal memory capacity.';
+        } else if (digitsCount >= 4) {
+            rating = 'Below Average';
+            ratingClass = 'below-average';
+            stars = '⭐⭐';
+            message = 'With practice, you can improve your memory capacity.';
+        } else {
+            rating = 'Beginner';
+            ratingClass = 'needs-practice';
+            stars = '⭐';
+            message = 'Regular memory exercises will help you improve quickly!';
         }
         
-        updateDebug('Game over: level=' + gameState.level + ', percentile=' + userPercentile);
+        // 创建或更新评级元素
+        let ratingElement = document.querySelector('.memory-rating');
+        if (!ratingElement) {
+            ratingElement = document.createElement('div');
+            ratingElement.className = 'memory-rating';
+            // 插入到百分比结果之后
+            elements.percentile.parentNode.parentNode.appendChild(ratingElement);
+        }
+        
+        ratingElement.innerHTML = `
+            <span class="rating ${ratingClass}">${rating}</span><br>
+            ${stars}<br>
+            <span class="rating-message">${message}</span>
+        `;
+        
+        // Show game over screen
+        showScreen(elements.gameOverScreen);
+        
+        // 保存结果到本地存储
+        saveMemoryResult(digitsCount);
+        
         showToast('Test complete! Your final score: ' + digitsCount + ' digits');
+    }
+    
+    // 保存测试结果到本地存储
+    function saveMemoryResult(score) {
+        let history = JSON.parse(localStorage.getItem('brainBenchmark_history') || '{}');
+        if (!history.memory) history.memory = [];
+        
+        // 添加新成绩和日期
+        history.memory.unshift({
+            score: score,
+            date: new Date().toISOString()
+        });
+        
+        // 保留最近10条记录
+        if (history.memory.length > 10) history.memory = history.memory.slice(0, 10);
+        
+        localStorage.setItem('brainBenchmark_history', JSON.stringify(history));
+        
+        // 更新并显示历史记录
+        updateMemoryHistory(history.memory);
+    }
+    
+    // 更新历史记录显示
+    function updateMemoryHistory(records) {
+        // 查找历史记录容器
+        const historyList = document.getElementById('history-list');
+        if (!historyList) return;
+        
+        historyList.innerHTML = '';
+        
+        if (records.length === 0) {
+            historyList.innerHTML = '<div class="history-item empty">No history yet</div>';
+            return;
+        }
+        
+        // 显示最近5条记录
+        const recentRecords = records.slice(0, 5);
+        
+        recentRecords.forEach((record, index) => {
+            const date = new Date(record.date);
+            const formattedDate = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            
+            item.innerHTML = `
+                <span class="history-date">${formattedDate}</span>
+                <span class="history-score">${record.score} digits</span>
+                ${index === 0 ? '<span class="history-badge">Latest</span>' : ''}
+            `;
+            
+            historyList.appendChild(item);
+        });
+        
+        // 如果有超过一条记录，计算并显示个人最佳
+        if (records.length > 1) {
+            const bestRecord = [...records].sort((a, b) => b.score - a.score)[0];
+            const bestDate = new Date(bestRecord.date);
+            const formattedBestDate = `${bestDate.getMonth()+1}/${bestDate.getDate()} ${String(bestDate.getHours()).padStart(2, '0')}:${String(bestDate.getMinutes()).padStart(2, '0')}`;
+            
+            const bestItem = document.createElement('div');
+            bestItem.className = 'history-item best';
+            
+            bestItem.innerHTML = `
+                <span class="history-date">${formattedBestDate}</span>
+                <span class="history-score">${bestRecord.score} digits</span>
+                <span class="history-badge best">Personal Best</span>
+            `;
+            
+            // 将个人最佳插入到列表顶部
+            historyList.insertBefore(bestItem, historyList.firstChild);
+        }
     }
     
     // Restart game
@@ -389,9 +515,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const level = elements.finalLevel.textContent;
         const digits = elements.finalDigits.textContent;
         const percentile = elements.percentile.textContent;
+        const rating = document.querySelector('.rating').textContent;
         
-        // Create share text
-        const shareText = `I memorized ${digits} digits in the BrainBenchmark Number Memory Test, better than ${percentile} of users! Try to beat me!`;
+        // Create enhanced share text
+        const shareText = `🧠 BrainBenchmark: I memorized ${digits} digits (${rating})\n💯 Better than ${percentile} of users\n🔗 Test your memory at https://braingame.cyou/number-memory.html`;
         
         // Copy to clipboard
         navigator.clipboard.writeText(shareText)
